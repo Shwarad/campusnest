@@ -1,0 +1,11 @@
+# SQLite database files — never deploy to Vercel
+*.db
+*.db-shm
+*.db-wal
+
+# Prisma generated output (rebuilt during vercel-build)
+server/node_modules/.prisma/
+
+# Local environment files
+server/.env
+client/.env

@@ -1,0 +1,12 @@
+{
+  "extends": "../server/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "../.vercel/output/functions",
+    "baseUrl": ".."
+  },
+  "include": [
+    "./**/*.ts",
+    "../server/src/**/*.ts"
+  ]
+}

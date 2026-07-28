@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE CONFIGURATION
+//
+// LOCAL DEV  → SQLite   (no external service needed)
+//   DATABASE_URL=file:./campusnest.db
+//
+// PRODUCTION → PostgreSQL via Neon (free tier at https://neon.tech)
+//   DATABASE_URL=postgresql://user:pass@ep-xxx.neon.tech/campusnest?sslmode=require
+//
+// To switch between providers, change `provider` below and re-run:
+//   npx prisma db push
+//
+// Current: postgresql (set to "sqlite" for local-only dev)
+// ─────────────────────────────────────────────────────────────────────────────
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NOTE: PostgreSQL supports native enums and String[] arrays.
+// The JSON-stringify workaround (used for SQLite) is NOT needed here —
+// houseRules, images, scamRiskFlags are stored as native Text[] arrays.
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  phone          String
+  password       String
+  role           String   // student | owner | admin
+  college        String?
+  isVerified     Boolean  @default(false)
+  identityStatus String   @default("unverified") // unverified | pending | verified
+  avatar         String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  properties      Property[]
+  savedProperties SavedProperty[]
+  reviews         Review[]
+  enquiriesAsStu  Enquiry[]       @relation("StudentEnquiries")
+  enquiriesAsOwn  Enquiry[]       @relation("OwnerEnquiries")
+  reports         Report[]
+  roommateProfile RoommateProfile?
+}
+
+model Property {
+  id                  String   @id @default(cuid())
+  title               String
+  description         String
+  street              String
+  locality            String
+  city                String
+  state               String
+  pincode             String
+  lat                 Float
+  lng                 Float
+  propertyType        String   // room | pg | hostel | flat | shared_room
+  rent                Int
+  deposit             Int
+  totalRooms          Int      @default(1)
+  availableBeds       Int      @default(1)
+  furnishing          String   // furnished | semi_furnished | unfurnished
+  genderPreference    String   // boys | girls | coed
+  wifi                Boolean  @default(false)
+  ac                  Boolean  @default(false)
+  attachedBathroom    Boolean  @default(false)
+  parking             Boolean  @default(false)
+  laundry             Boolean  @default(false)
+  powerBackup         Boolean  @default(false)
+  petFriendly         Boolean  @default(false)
+  food                Boolean  @default(false)
+  gym                 Boolean  @default(false)
+  tv                  Boolean  @default(false)
+  refrigerator        Boolean  @default(false)
+  waterFilter         Boolean  @default(false)
+  // Stored as JSON string for SQLite compat; parsed by shapeProperty() in controller
+  houseRules          String   @default("[]")
+  availableFrom       DateTime
+  images              String   @default("[]")
+  college             String
+  distanceFromCollege Float
+  verificationStatus  String   @default("unverified") // unverified | pending | verified | rejected
+  isAvailable         Boolean  @default(true)
+  isActive            Boolean  @default(true)
+  views               Int      @default(0)
+  avgRating           Float    @default(0)
+  reviewCount         Int      @default(0)
+  scamRiskScore       Int      @default(0)
+  scamRiskLevel       String   @default("low") // low | review_recommended | high
+  scamRiskFlags       String   @default("[]")
+  contactPhone        String
+  contactEmail        String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  ownerId    String
+  owner      User             @relation(fields: [ownerId], references: [id])
+  savedBy    SavedProperty[]
+  reviews    Review[]
+  enquiries  Enquiry[]
+  reports    Report[]
+  facilities NearbyFacility[]
+}
+
+model NearbyFacility {
+  id         String   @id @default(cuid())
+  name       String
+  type       String
+  distance   String
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model SavedProperty {
+  userId     String
+  propertyId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, propertyId])
+}
+
+model Review {
+  id             String   @id @default(cuid())
+  roomQuality    Int
+  locality       Int
+  water          Int
+  electricity    Int
+  internet       Int
+  ownerBehaviour Int
+  safety         Int
+  valueForMoney  Int
+  overallRating  Float
+  comment        String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  studentId  String
+  student    User     @relation(fields: [studentId], references: [id])
+
+  @@unique([propertyId, studentId])
+}
+
+model RoommateProfile {
+  id                String   @id @default(cuid())
+  name              String
+  college           String
+  budgetMin         Int
+  budgetMax         Int
+  preferredLocality String
+  moveInDate        DateTime
+  roomType          String   // single | shared | pg | hostel | flat
+  genderPreference  String   @default("any") // male | female | any
+  sleepSchedule     String   // early_bird | night_owl | flexible
+  studyHabits       String   // quiet | with_music | social | flexible
+  cleanliness       String   // very_clean | clean | moderate | relaxed
+  smoking           Boolean  @default(false)
+  drinking          Boolean  @default(false)
+  foodPreference    String   @default("any") // veg | non_veg | any
+  noiseTolerance    String   @default("medium") // low | medium | high
+  visitors          String   @default("occasional") // never | occasional | frequent
+  pets              Boolean  @default(false)
+  bio               String   @default("")
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  userId String   @unique
+  user   User     @relation(fields: [userId], references: [id])
+}
+
+model Enquiry {
+  id                 String   @id @default(cuid())
+  studentName        String
+  contactNumber      String
+  preferredVisitDate DateTime
+  moveInDate         DateTime
+  message            String
+  status             String   @default("pending") // pending | seen | responded | closed
+  ownerResponse      String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+  studentId  String
+  student    User     @relation("StudentEnquiries", fields: [studentId], references: [id])
+  ownerId    String
+  owner      User     @relation("OwnerEnquiries", fields: [ownerId], references: [id])
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  reason      String   // fake_listing | advance_payment | wrong_info | duplicate | scam | inappropriate | other
+  description String
+  status      String   @default("pending") // pending | reviewed | dismissed | action_taken
+  adminNotes  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  propertyId   String
+  property     Property @relation(fields: [propertyId], references: [id])
+  reportedById String
+  reportedBy   User     @relation(fields: [reportedById], references: [id])
+
+  @@unique([propertyId, reportedById])
+}
