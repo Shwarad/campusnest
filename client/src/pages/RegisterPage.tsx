@@ -7,12 +7,9 @@ import {
   Eye, EyeOff, Loader2, Mail, Phone, User,
   GraduationCap, Building, ArrowLeft, RefreshCw,
 } from 'lucide-react';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
 
 // ── Zod schemas ───────────────────────────────────────────────────────────────
 
@@ -206,7 +203,7 @@ function PhoneOtpRegister({ role, college, onSuccess }: {
 type Tab = 'email' | 'phone';
 
 export default function RegisterPage() {
-  const { register: registerUser, loginWithGoogle } = useAuth();
+  const { register: registerUser } = useAuth();
   const navigate    = useNavigate();
   const [params]    = useSearchParams();
   const [tab,       setTab]       = useState<Tab>('email');
@@ -241,18 +238,6 @@ export default function RegisterPage() {
     } finally { setSubmitting(false); }
   };
 
-  const handleGoogleSuccess = async (credentialResponse: { credential?: string }) => {
-    if (!credentialResponse.credential) return;
-    try {
-      await loginWithGoogle(credentialResponse.credential, role, college);
-      toast.success('Account created with Google!');
-      redirectAfterAuth(role);
-    } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      toast.error(e.response?.data?.message ?? 'Google sign-up failed.');
-    }
-  };
-
   const handlePhoneSuccess = (_token: string, user: unknown) => {
     const u = user as { role?: string };
     toast.success('Account created! Welcome to CampusNest!');
@@ -281,29 +266,6 @@ export default function RegisterPage() {
             </div>
           </div>
         )}
-
-        {/* Google button */}
-        {GOOGLE_CLIENT_ID ? (
-          <div className="mt-4">
-            <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => toast.error('Google sign-up failed. Please try another method.')}
-                text="signup_with"
-                shape="rectangular"
-                size="large"
-                width="100%"
-                useOneTap={false}
-              />
-            </GoogleOAuthProvider>
-          </div>
-        ) : (
-          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-4 text-center">
-            Google sign-in is not configured. Set <code>VITE_GOOGLE_CLIENT_ID</code> in your <code>.env</code> file.
-          </p>
-        )}
-
-        <OrDivider />
 
         {/* Tab switcher */}
         <div className="flex bg-gray-100 rounded-xl p-1 mb-4">

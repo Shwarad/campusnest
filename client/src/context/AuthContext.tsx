@@ -8,7 +8,6 @@ interface AuthContextType {
   isLoading:       boolean;
   isAuthenticated: boolean;
   login:           (email: string, password: string) => Promise<void>;
-  loginWithGoogle: (idToken: string, role?: 'student' | 'owner', college?: string) => Promise<void>;
   loginWithPhone:  (phone: string, otp: string) => Promise<void>;
   loginWithEmailOtp:(email: string, otp: string) => Promise<void>;
   register:        (data: RegisterData) => Promise<void>;
@@ -107,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider value={{
       user, token, isLoading, isAuthenticated: !!user,
-      login, loginWithGoogle, loginWithPhone, loginWithEmailOtp,
+      login, loginWithPhone, loginWithEmailOtp,
       register, logout, updateUser, refreshUser,
     }}>
       {children}

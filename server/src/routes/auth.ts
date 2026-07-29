@@ -2,7 +2,6 @@ import { Router } from 'express';
 import {
   register,
   login,
-  googleAuth,
   sendPhoneOtp,
   verifyPhoneOtp,
   sendEmailOtpLogin,
@@ -27,9 +26,6 @@ const otpLimiter = rateLimit({
 // ── Email + Password ──────────────────────────────────────────────────────────
 router.post('/register', register);
 router.post('/login',    login);
-
-// ── Google OAuth ──────────────────────────────────────────────────────────────
-router.post('/google', googleAuth);
 
 // ── Phone OTP ─────────────────────────────────────────────────────────────────
 router.post('/phone/send-otp',   otpLimiter, sendPhoneOtp);

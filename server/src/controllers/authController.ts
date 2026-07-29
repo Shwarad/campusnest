@@ -12,7 +12,6 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
-import { OAuth2Client } from 'google-auth-library';
 import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { generateOtp, hashOtp, verifyOtp, otpExpiry, sendSmsOtp, sendEmailOtp } from '../utils/otp';
@@ -114,87 +113,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     } else {
       res.status(500).json({ message: 'Login failed. Please try again.' });
     }
-  }
-};
-
-// ── 3. Google OAuth ───────────────────────────────────────────────────────────
-
-const googleSchema = z.object({
-  idToken: z.string().min(1),
-  role:    z.enum(['student', 'owner']).optional().default('student'),
-  college: z.string().optional(),
-});
-
-export const googleAuth = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const result = googleSchema.safeParse(req.body);
-    if (!result.success) {
-      res.status(400).json({ message: 'Google ID token is required.' });
-      return;
-    }
-    const { idToken, role, college } = result.data;
-
-    // Verify the ID token with Google
-    let payload;
-    try {
-      const ticket = await googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      payload = ticket.getPayload();
-    } catch {
-      res.status(401).json({ message: 'Invalid Google token. Please try again.' });
-      return;
-    }
-
-    if (!payload?.sub || !payload.email) {
-      res.status(401).json({ message: 'Could not extract user information from Google token.' });
-      return;
-    }
-
-    const { sub: googleId, email, name = 'Google User', picture } = payload;
-
-    // Find by googleId first, then fall back to email
-    let user = await prisma.user.findFirst({
-      where: { OR: [{ googleId }, { email }] },
-    });
-
-    if (user) {
-      // Merge googleId if the account was created via email/password before
-      if (!user.googleId) {
-        user = await prisma.user.update({ where: { id: user.id }, data: { googleId } });
-      }
-      if (!user.isActive) {
-        res.status(403).json({ message: 'Account deactivated. Contact support.' });
-        return;
-      }
-    } else {
-      // New user — auto-register
-      user = await prisma.user.create({
-        data: {
-          name,
-          email,
-          phone: '',
-          password: '',
-          role,
-          college: role === 'student' ? college : undefined,
-          googleId,
-          avatar: picture,
-          isVerified: true, // Google-verified email
-        },
-      });
-    }
-
-    const token = generateToken(user.id);
-    res.json({
-      message:    user.createdAt.getTime() === user.updatedAt.getTime() ? 'Account created via Google' : 'Google sign-in successful',
-      token,
-      user:       safeUser(user as never),
-      isNewUser:  !payload.email_verified,
-    });
-  } catch (err) {
-    console.error('Google auth error:', err);
-    res.status(500).json({ message: 'Google authentication failed. Please try again.' });
   }
 };
 

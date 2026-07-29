@@ -7,12 +7,9 @@ import {
   Eye, EyeOff, Loader2, User, Mail, Phone,
   BookOpen, Building, ArrowLeft, RefreshCw,
 } from 'lucide-react';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? '';
 
 // ── Schemas ───────────────────────────────────────────────────────────────────
 
@@ -248,7 +245,7 @@ function EmailOtpLogin({ onSuccess }: { onSuccess: () => void }) {
 type Tab = 'password' | 'phone' | 'emailotp';
 
 export default function LoginPage() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
   const navigate    = useNavigate();
   const [tab,       setTab]        = useState<Tab>('password');
   const [showPwd,   setShowPwd]    = useState(false);
@@ -275,18 +272,6 @@ export default function LoginPage() {
       const e = err as { response?: { data?: { message?: string } } };
       toast.error(e.response?.data?.message ?? 'Login failed. Check your credentials.');
     } finally { setSubmitting(false); }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse: { credential?: string }) => {
-    if (!credentialResponse.credential) return;
-    try {
-      await loginWithGoogle(credentialResponse.credential);
-      toast.success('Signed in with Google!');
-      redirectAfterLogin();
-    } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } };
-      toast.error(e.response?.data?.message ?? 'Google sign-in failed.');
-    }
   };
 
   const TABS: { id: Tab; label: string }[] = [
@@ -316,27 +301,6 @@ export default function LoginPage() {
             ))}
           </div>
         </div>
-
-        {/* Google Sign In */}
-        {GOOGLE_CLIENT_ID ? (
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => toast.error('Google sign-in failed.')}
-              text="signin_with"
-              shape="rectangular"
-              size="large"
-              width="100%"
-              useOneTap={false}
-            />
-          </GoogleOAuthProvider>
-        ) : (
-          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-center">
-            Google sign-in unavailable — set <code>VITE_GOOGLE_CLIENT_ID</code> in <code>.env</code>.
-          </p>
-        )}
-
-        <OrDivider />
 
         {/* Tab switcher */}
         <div className="flex bg-gray-100 rounded-xl p-1 mb-4 gap-1">
