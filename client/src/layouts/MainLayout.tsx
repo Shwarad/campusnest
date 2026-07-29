@@ -199,7 +199,7 @@ export default function MainLayout() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
-            <p>© 2024 CampusNest. Built for students, by students.</p>
+            <p>© 2026 CampusNest. Built for students, by students.</p>
             <p className="text-gray-500">⚠️ Always verify a property before making any payment.</p>
           </div>
         </div>

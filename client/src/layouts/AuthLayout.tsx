@@ -18,7 +18,7 @@ export default function AuthLayout() {
         <Outlet />
       </main>
       <footer className="text-center py-4 text-xs text-gray-400">
-        © 2024 CampusNest — Find your room. Find your roommate. Feel at home.
+        © 2026 CampusNest — Find your room. Find your roommate. Feel at home.
       </footer>
     </div>
   );

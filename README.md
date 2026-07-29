@@ -728,7 +728,7 @@ git push origin feature/your-feature-name
 
 ## 📄 Licence
 
-MIT © 2024 CampusNest — Built for students, by students.
+MIT © 2026 CampusNest — Built for students, by students.
 
 ---
 
