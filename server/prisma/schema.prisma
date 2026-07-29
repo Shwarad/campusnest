@@ -30,8 +30,8 @@ model User {
   id             String   @id @default(cuid())
   name           String
   email          String   @unique
-  phone          String
-  password       String
+  phone          String   @default("")
+  password       String   @default("")
   role           String   // student | owner | admin
   college        String?
   isVerified     Boolean  @default(false)
@@ -40,6 +40,13 @@ model User {
   isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  // ── Social & OTP auth fields ─────────────────────────────────────────────
+  googleId       String?  @unique       // Google sub claim
+  phoneVerified  Boolean  @default(false)
+  otpHash        String?                // bcrypt hash of current OTP
+  otpExpiry      DateTime?              // when the OTP expires
+  otpPurpose     String?                // "phone_verify" | "email_otp_login" | "phone_login"
 
   properties      Property[]
   savedProperties SavedProperty[]

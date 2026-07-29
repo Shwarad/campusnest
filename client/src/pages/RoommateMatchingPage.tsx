@@ -7,6 +7,7 @@ import {
 import { roommateService } from '../services/roommateService';
 import { RoommateMatch, RoommateProfile } from '../types';
 import { useAuth } from '../context/AuthContext';
+import RoommateMatchExplanation from '../components/ai/RoommateMatchExplanation';
 import toast from 'react-hot-toast';
 
 const STEPS = ['Budget & Location', 'Lifestyle', 'Habits & Preferences', 'Review'];
@@ -370,6 +371,12 @@ export default function RoommateMatchingPage() {
                     {p.bio && <p className="text-xs text-gray-500 italic line-clamp-2">"{p.bio}"</p>}
 
                     <p className="text-xs text-primary-600 font-medium">{compatibility.explanation}</p>
+
+                    <RoommateMatchExplanation
+                      roommateProfileId={p._id}
+                      roommateeName={displayName}
+                      compatibilityScore={compatibility.score}
+                    />
 
                     <button className="btn-primary w-full text-xs py-2 mt-auto">
                       <Heart className="w-3.5 h-3.5" /> Send Request

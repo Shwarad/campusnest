@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { propertyService } from '../services/propertyService';
 import { Property } from '../types';
+import AIComparisonPanel from '../components/ai/AIComparisonPanel';
 
 type ColumnKey = keyof Pick<Property, 'rent' | 'deposit' | 'distanceFromCollege' | 'avgRating' | 'furnishing' | 'genderPreference' | 'propertyType' | 'verificationStatus' | 'availableBeds'>;
 
@@ -52,6 +53,7 @@ export default function ComparePropertiesPage() {
   );
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const propertyTitles = Object.fromEntries(properties.map((p) => [p._id, p.title]));
 
   useEffect(() => {
     const fetchCompare = async () => {
@@ -182,6 +184,12 @@ export default function ComparePropertiesPage() {
           <p className="text-xs text-gray-400 mt-3 text-center">
             ✓ Highlighted cells indicate the best value for that category.
           </p>
+
+          {/* AI Comparison */}
+          <AIComparisonPanel
+            propertyIds={compareIds}
+            propertyTitles={propertyTitles}
+          />
         </div>
       )}
 

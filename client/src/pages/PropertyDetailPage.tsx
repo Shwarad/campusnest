@@ -11,6 +11,9 @@ import { propertyService } from '../services/propertyService';
 import { enquiryService } from '../services/enquiryService';
 import { Property, Review, User as UserType } from '../types';
 import { useAuth } from '../context/AuthContext';
+import PropertyBrief from '../components/ai/PropertyBrief';
+import ReviewSummaryAI from '../components/ai/ReviewSummary';
+import RiskExplanation from '../components/ai/RiskExplanation';
 import toast from 'react-hot-toast';
 
 const AMENITY_ICONS: Record<string, React.ReactNode> = {
@@ -296,18 +299,19 @@ export default function PropertyDetailPage() {
             </div>
           </div>
 
-          {/* Scam Risk Banner */}
-          {property.scamRiskLevel !== 'low' && (
+          {/* AI Risk Explanation */}
+          <RiskExplanation propertyId={property._id} riskLevel={property.scamRiskLevel} />
+
+          {/* Scam Risk Banner (existing flags, shown below AI explanation) */}
+          {property.scamRiskLevel !== 'low' && property.scamRiskFlags.length > 0 && (
             <div className={`border rounded-xl p-4 ${riskColors[property.scamRiskLevel]}`}>
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-sm">{riskLabels[property.scamRiskLevel]}</p>
-                  {property.scamRiskFlags.length > 0 && (
-                    <ul className="mt-1.5 space-y-0.5 text-xs">
-                      {property.scamRiskFlags.map((f, i) => <li key={i}>• {f}</li>)}
-                    </ul>
-                  )}
+                  <ul className="mt-1.5 space-y-0.5 text-xs">
+                    {property.scamRiskFlags.map((f, i) => <li key={i}>• {f}</li>)}
+                  </ul>
                   <p className="text-xs mt-2 opacity-75">⚠️ This is an automated risk indicator, not a guarantee.</p>
                 </div>
               </div>
@@ -363,6 +367,9 @@ export default function PropertyDetailPage() {
               )}
             </div>
           </div>
+
+          {/* NestAI Property Brief */}
+          <PropertyBrief propertyId={property._id} />
 
           {/* House Rules */}
           {property.houseRules.length > 0 && (
@@ -437,6 +444,9 @@ export default function PropertyDetailPage() {
               </div>
             )}
           </div>
+
+          {/* AI Review Summary */}
+          <ReviewSummaryAI propertyId={property._id} reviewCount={property.reviewCount} />
         </div>
 
         {/* Right Sidebar */}

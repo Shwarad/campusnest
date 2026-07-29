@@ -9,13 +9,14 @@
 [![Node.js](https://img.shields.io/badge/Node.js-22-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)
 [![Prisma](https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://prisma.io)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![IBM Granite](https://img.shields.io/badge/IBM_Granite-AI-0f62fe?style=for-the-badge&logo=ibm&logoColor=white)](https://www.ibm.com/watsonx)
 [![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 
 <br/>
 
 > **🎓 The all-in-one student housing platform for college students in Guwahati, Assam.**  
-> Search verified rooms, find compatible roommates, and avoid rental scams — all in one place.
+> Search verified rooms, find compatible roommates, avoid rental scams — powered by IBM Granite AI.
 
 <br/>
 
@@ -42,8 +43,9 @@ It is a full-stack web application built specifically for college students searc
 - ✅ **Verified, genuine listings** with scam-risk indicators
 - 🗺️ **Map-based discovery** with nearby facilities
 - 📊 **Side-by-side property comparison** with smart recommendations
+- 🤖 **NestAI** — IBM Granite-powered housing assistant
 
-> Built for hackathon demonstration — Guwahati, Assam context with real locality data.
+> Built for Guwahati, Assam context with real locality data.
 
 ---
 
@@ -51,13 +53,14 @@ It is a full-stack web application built specifically for college students searc
 
 | Pain Point | CampusNest Solution |
 |---|---|
-| Fake listings and scam advances | Automated scam-risk detector (Low / Review / High) |
+| Fake listings and scam advances | Automated scam-risk detector (Low / Review / High) + AI explanation |
 | No way to verify a landlord | Admin verification badge system |
-| Hard to compare multiple properties | Side-by-side comparison of up to 3 properties |
-| Finding a roommate is hit-or-miss | 8-factor weighted compatibility algorithm |
+| Hard to compare multiple properties | Side-by-side comparison + **AI comparison with NestAI** |
+| Finding a roommate is hit-or-miss | 8-factor weighted compatibility algorithm + AI explanation |
 | Don't know the area at all | Nearby facilities on every property page |
 | No idea if rent is fair | Average rent benchmarks for the area |
 | Landlord ghosts after enquiry | Internal enquiry system with status tracking |
+| Hard to search naturally | **NestAI natural-language search** |
 
 ---
 
@@ -69,6 +72,7 @@ It is a full-stack web application built specifically for college students searc
 
 **🔍 Discovery**
 - Smart search with 15+ filters
+- **NestAI natural-language search** ("Verified PG under ₹7,000 near Cotton University")
 - Grid and map view (Leaflet + OpenStreetMap)
 - Sort by rent, rating, distance, popularity
 - College-centric distance filtering
@@ -76,10 +80,35 @@ It is a full-stack web application built specifically for college students searc
 </td>
 <td width="50%">
 
+**🤖 NestAI (IBM Granite)**
+- Natural-language property search
+- AI property comparison with trade-offs
+- NestAI Property Brief per listing
+- Review summarisation with sentiment
+- Roommate compatibility explanation
+- Scam-risk explanation in plain English
+- NestAI housing assistant chatbot
+
+</td>
+</tr>
+<tr>
+<td>
+
+**🔐 Authentication (Multi-method)**
+- Email + Password
+- **Google Sign-in / Sign-up** (OAuth 2.0)
+- **Phone + SMS OTP** (via Twilio)
+- **Email + OTP** (passwordless, via SMTP)
+- All methods produce the same JWT session
+- Brute-force protection on OTP endpoints
+
+</td>
+<td>
+
 **🤝 Roommate Matching**
 - 8-factor lifestyle questionnaire
 - 0–100% compatibility score
-- Explanation of strong matches
+- **AI explanation** of strong matches and differences
 - Browse and connect with profiles
 
 </td>
@@ -89,6 +118,7 @@ It is a full-stack web application built specifically for college students searc
 
 **🛡️ Trust & Safety**
 - Low / Review Recommended / High scam risk badge
+- **AI-explained risk signals** (neutral language)
 - Admin-verified property badge
 - Multi-report flagging system
 - Safety tips on every page
@@ -99,28 +129,9 @@ It is a full-stack web application built specifically for college students searc
 **💡 Smart Features**
 - Personalised match percentage with reasons
 - Side-by-side property comparison
+- **"Compare with NestAI"** button
 - Favourite / saved listings
 - Monthly expense calculator
-
-</td>
-</tr>
-<tr>
-<td>
-
-**📬 Communication**
-- Direct student-to-owner enquiry form
-- Visit date and move-in date scheduling
-- Owner response tracking
-- Enquiry status (Pending / Seen / Responded)
-
-</td>
-<td>
-
-**🌟 Reviews & Admin**
-- 8-category rating system per property
-- Average rating with breakdown
-- Admin dashboard (verifications, reports, users)
-- Platform statistics
 
 </td>
 </tr>
@@ -138,6 +149,7 @@ It is a full-stack web application built specifically for college students searc
 | **Tailwind CSS 3** | Utility-first responsive styling |
 | **React Router v6** | Client-side routing |
 | **React Hook Form + Zod** | Form validation |
+| **@react-oauth/google** | Google OAuth 2.0 sign-in button |
 | **Leaflet + React Leaflet** | Interactive maps (OpenStreetMap — no API key) |
 | **Lucide React** | Icon library |
 | **React Hot Toast** | Toast notifications |
@@ -151,9 +163,13 @@ It is a full-stack web application built specifically for college students searc
 | **Prisma 5** | ORM and schema management |
 | **PostgreSQL / SQLite** | Production DB (Neon) / Local dev DB |
 | **JWT + bcryptjs** | Auth and password hashing |
+| **google-auth-library** | Server-side Google ID token verification |
+| **Twilio** | SMS OTP delivery |
+| **Nodemailer** | Email OTP delivery |
+| **IBM watsonx.ai SDK** | IBM Granite AI integration |
+| **node-cache** | In-process cache for AI responses |
 | **Zod** | Server-side input validation |
 | **Helmet + CORS + Rate Limiting** | Security middleware |
-| **Morgan** | HTTP request logging |
 
 ### Infrastructure
 | Technology | Purpose |
@@ -161,12 +177,15 @@ It is a full-stack web application built specifically for college students searc
 | **Vercel** | Frontend hosting + serverless API functions |
 | **Neon** | Free PostgreSQL database (production) |
 | **SQLite** | Zero-config local development database |
+| **IBM watsonx.ai** | IBM Granite LLM and embedding models |
+| **Google Cloud Console** | OAuth 2.0 credentials |
+| **Twilio** | SMS OTP (free trial available) |
 
 ### Testing
 | Technology | Purpose |
 |---|---|
 | **Vitest** | Unit and integration test runner |
-| 18 passing tests | Compatibility algorithm, recommendation scoring, scam detection |
+| **60 passing tests** | Compatibility, recommendations, scam detection, all AI services |
 
 ---
 
@@ -178,45 +197,90 @@ campusnest/
 │   └── index.ts
 ├── client/                     ← React + Vite frontend
 │   ├── src/
-│   │   ├── components/         ← PropertyCard, PropertyMap
-│   │   ├── context/            ← AuthContext (JWT)
+│   │   ├── components/
+│   │   │   ├── PropertyCard.tsx
+│   │   │   ├── PropertyMap.tsx
+│   │   │   └── ai/             ← AI UI components
+│   │   │       ├── NaturalLanguageSearch.tsx
+│   │   │       ├── AIComparisonPanel.tsx
+│   │   │       ├── PropertyBrief.tsx
+│   │   │       ├── RoommateMatchExplanation.tsx
+│   │   │       ├── ReviewSummary.tsx
+│   │   │       ├── RiskExplanation.tsx
+│   │   │       ├── NestAIChat.tsx
+│   │   │       ├── AIResponseDisclaimer.tsx
+│   │   │       └── AIThinkingSkeleton.tsx
+│   │   ├── context/            ← AuthContext (JWT + Google + OTP)
 │   │   ├── layouts/            ← MainLayout, DashboardLayout, AuthLayout
 │   │   ├── pages/              ← 12 route pages
-│   │   │   ├── LandingPage.tsx
-│   │   │   ├── SearchPage.tsx
-│   │   │   ├── PropertyDetailPage.tsx
-│   │   │   ├── RoommateMatchingPage.tsx
-│   │   │   ├── ComparePropertiesPage.tsx
-│   │   │   ├── StudentDashboardPage.tsx
-│   │   │   ├── OwnerDashboardPage.tsx
-│   │   │   ├── AdminDashboardPage.tsx
-│   │   │   ├── AddPropertyPage.tsx
-│   │   │   ├── LoginPage.tsx
-│   │   │   └── RegisterPage.tsx
-│   │   ├── services/           ← API service layer (axios)
-│   │   ├── types/              ← TypeScript interfaces
-│   │   └── test/               ← Frontend tests
-│   └── package.json
+│   │   ├── services/
+│   │   │   ├── api.ts          ← Axios base client
+│   │   │   ├── propertyService.ts
+│   │   │   ├── roommateService.ts
+│   │   │   ├── enquiryService.ts
+│   │   │   ├── adminService.ts
+│   │   │   └── aiService.ts    ← All AI API calls
+│   │   └── types/
 ├── server/                     ← Express + Prisma backend
 │   ├── prisma/
-│   │   └── schema.prisma       ← 8 models: User, Property, Review, etc.
+│   │   └── schema.prisma       ← 8 models + googleId/OTP fields
 │   ├── src/
-│   │   ├── app.ts              ← Express app (no listen — used by Vercel)
-│   │   ├── index.ts            ← Local dev server (calls listen)
-│   │   ├── config/             ← Prisma client singleton
-│   │   ├── controllers/        ← auth, property, roommate, enquiry, admin
-│   │   ├── middleware/         ← JWT auth, RBAC
-│   │   ├── routes/             ← Express routers
+│   │   ├── app.ts
+│   │   ├── controllers/
+│   │   │   └── authController.ts  ← Email+Pw, Google, Phone OTP, Email OTP
+│   │   ├── routes/
+│   │   │   └── auth.ts            ← 8 auth endpoints
 │   │   ├── utils/
-│   │   │   ├── roommateCompatibility.ts  ← 8-factor algorithm
-│   │   │   └── recommendation.ts         ← Scoring + scam detection
-│   │   ├── seed/               ← Demo data for Guwahati
-│   │   └── tests/              ← 18 unit tests
-│   └── package.json
-├── vercel.json                 ← Vercel deployment config
-├── .env.example                ← All env vars documented
-└── README.md
+│   │   │   ├── otp.ts             ← OTP generation, Twilio, Nodemailer
+│   │   │   ├── roommateCompatibility.ts
+│   │   │   └── recommendation.ts
+│   │   └── ai/                 ← AI services
+│   │       ├── graniteClient.ts
+│   │       ├── promptTemplates.ts
+│   │       ├── responseSchemas.ts
+│   │       ├── mockMode.ts
+│   │       ├── naturalSearch.service.ts
+│   │       ├── propertyComparison.service.ts
+│   │       ├── listingSummary.service.ts
+│   │       ├── roommateExplanation.service.ts
+│   │       ├── reviewSummary.service.ts
+│   │       ├── scamExplanation.service.ts
+│   │       ├── rag.service.ts
+│   │       ├── chat.service.ts
+│   │       └── ai.routes.ts
+├── vercel.json
+├── .env.example                ← All env vars documented (root)
+└── server/.env.example         ← Server-only vars with setup instructions
 ```
+
+---
+
+## 🔐 Authentication Methods
+
+CampusNest supports four sign-in and sign-up methods. All produce the same JWT session and work on the same account.
+
+### 1. Email + Password
+Classic registration and login. Passwords are hashed with bcrypt (12 rounds).
+
+### 2. Google Sign-In / Sign-Up
+One-click login using your Google account. The backend verifies the ID token with Google's servers — the token never passes through the client unchecked.
+
+- First sign-in with a Google account automatically creates a CampusNest account.
+- Existing email/password accounts are linked to Google on first Google sign-in.
+
+### 3. Phone + SMS OTP
+Enter your phone number → receive a 6-digit OTP via SMS → verified in 10 minutes.
+
+- OTP is hashed with bcrypt before storage — never stored in plain text.
+- Rate-limited to 5 requests per 10 minutes per IP.
+- In dev mode (no Twilio credentials), OTP is printed to the server console.
+
+### 4. Email + OTP (Passwordless)
+Enter your email → receive a 6-digit sign-in code → verified in 10 minutes.
+
+- Only works for existing accounts.
+- Safe against email-enumeration attacks (identical response regardless of email existence).
+- In dev mode (no SMTP credentials), OTP is printed to the server console.
 
 ---
 
@@ -245,18 +309,28 @@ npm run install:all
 
 ```bash
 # Copy the example env file
-cp .env.example server/.env
+cp server/.env.example server/.env
 ```
 
-The default `server/.env` for local development:
+Minimum local dev `.env` (SQLite, no external services):
 
 ```env
 PORT=5000
 NODE_ENV=development
 DATABASE_URL=file:./campusnest.db
-JWT_SECRET=campusnest-hackathon-secret-key-2024
+JWT_SECRET=campusnest-dev-secret-key-change-in-prod
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
+
+# Optional — leave blank to use console-log OTP fallback in dev:
+GOOGLE_CLIENT_ID=
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_PHONE_NUMBER=
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
 ```
 
 > **Note:** For local dev, change `server/prisma/schema.prisma` → `provider = "sqlite"` if it shows `postgresql`.
@@ -266,7 +340,7 @@ CLIENT_URL=http://localhost:5173
 ```bash
 cd server
 
-# Generate Prisma client
+# Regenerate Prisma client (required after any schema change)
 npx prisma generate
 
 # Create the SQLite database and all tables
@@ -289,6 +363,7 @@ npm run dev
 | 🖥️ Frontend (React) | http://localhost:5173 |
 | ⚡ Backend API | http://localhost:5000/api |
 | ❤️ Health check | http://localhost:5000/api/health |
+| 🤖 AI status | http://localhost:5000/api/ai/status |
 
 ---
 
@@ -308,31 +383,95 @@ Login at `http://localhost:5173/login` with these credentials:
 
 ## 🌐 Deploying to Vercel
 
-This project is Vercel-ready. Frontend and API share one deployment.
-
-### What you need
-
-1. **Neon PostgreSQL** (free) — [neon.tech](https://neon.tech)
-2. **Vercel account** — [vercel.com](https://vercel.com)
-
 ### Environment Variables for Vercel
 
 Set these in **Vercel → Project → Settings → Environment Variables**:
 
-| Variable | Required | Description |
-|---|---|---|
-| `DATABASE_URL` | ✅ **Required** | `postgresql://user:pass@host/db?sslmode=require` — from Neon |
-| `JWT_SECRET` | ✅ **Required** | 64-char random string. Generate: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` |
-| `JWT_EXPIRES_IN` | Optional | Token lifetime — default `7d` |
-| `NODE_ENV` | Optional | Set to `production` |
-| `CLIENT_URL` | Optional | Your Vercel URL for CORS e.g. `https://campusnest.vercel.app` |
-| `VITE_API_URL` | Optional | Leave **blank** when frontend+backend share one Vercel project |
+#### Required
+
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | `postgresql://user:pass@host/db?sslmode=require` from [neon.tech](https://neon.tech) |
+| `JWT_SECRET` | 64-char random string: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` |
+
+#### Authentication
+
+| Variable | Description |
+|---|---|
+| `GOOGLE_CLIENT_ID` | From [Google Cloud Console](https://console.cloud.google.com) → OAuth 2.0 Client ID |
+| `TWILIO_ACCOUNT_SID` | From [Twilio Console](https://console.twilio.com) — SMS OTP |
+| `TWILIO_AUTH_TOKEN` | From Twilio Console |
+| `TWILIO_PHONE_NUMBER` | Your Twilio phone number (E.164 format, e.g. `+1xxxxxxxxxx`) |
+| `SMTP_HOST` | SMTP server hostname (e.g. `smtp.gmail.com`) — email OTP |
+| `SMTP_PORT` | SMTP port (587 for TLS, 465 for SSL) |
+| `SMTP_USER` | SMTP username / email address |
+| `SMTP_PASS` | SMTP password or App Password |
+| `SMTP_FROM` | Sender name and email, e.g. `CampusNest <you@gmail.com>` |
+
+#### IBM Granite AI (optional)
+
+| Variable | Description |
+|---|---|
+| `IBM_WATSONX_API_KEY` | IBM Cloud IAM API key from [cloud.ibm.com](https://cloud.ibm.com) |
+| `IBM_WATSONX_PROJECT_ID` | watsonx.ai project ID |
+| `IBM_WATSONX_URL` | Regional endpoint, e.g. `https://us-south.ml.cloud.ibm.com` |
+| `IBM_GRANITE_MODEL_ID` | Model ID, e.g. `ibm/granite-13b-chat-v2` |
+| `IBM_GRANITE_EMBEDDING_MODEL_ID` | Embedding model ID, e.g. `ibm/slate-125m-english-rtrvr` |
+| `IBM_WATSONX_API_VERSION` | API version date, e.g. `2024-05-31` |
+| `AI_REQUEST_TIMEOUT_MS` | Request timeout in ms (default: `20000`) |
+| `AI_FEATURES_ENABLED` | Set `false` to disable all AI features |
+| `AI_MOCK_MODE` | Set `true` for offline demo without IBM credentials |
+
+#### Frontend
+
+| Variable | Description |
+|---|---|
+| `VITE_GOOGLE_CLIENT_ID` | Same value as `GOOGLE_CLIENT_ID` — enables the Google Sign-In button |
+| `VITE_API_URL` | Leave **blank** when frontend + backend share one Vercel project |
+
+### Setting up Google OAuth
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com)
+2. Create a project (or use an existing one)
+3. **APIs & Services → Credentials → Create OAuth 2.0 Client ID**
+4. Application type: **Web application**
+5. **Authorised JavaScript origins:**
+   - `http://localhost:5173` (development)
+   - `https://your-app.vercel.app` (production)
+6. Copy the **Client ID** (you do not need the Client Secret for this flow)
+7. Set `GOOGLE_CLIENT_ID` (server) and `VITE_GOOGLE_CLIENT_ID` (client) to this value
+
+### Setting up Twilio SMS OTP
+
+1. Sign up at [twilio.com](https://twilio.com) — free trial includes credits
+2. Get a phone number from the Twilio Console
+3. Copy **Account SID** and **Auth Token** from the Console Dashboard
+4. Set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`
+
+> **Dev tip:** If Twilio credentials are absent, the OTP is printed to the server console — no SMS is sent.
+
+### Setting up Email OTP (SMTP)
+
+Works with Gmail, Outlook, Resend, Mailgun, or any SMTP provider.
+
+**Gmail example:**
+1. Enable 2-Step Verification on your Google account
+2. Go to [myaccount.google.com → Security → App Passwords](https://myaccount.google.com/apppasswords)
+3. Generate an App Password for "Mail"
+4. Use `smtp.gmail.com`, port `587`, your Gmail address, and the App Password
+
+**Resend (recommended for production):**
+1. Sign up at [resend.com](https://resend.com)
+2. Create an API key and SMTP credentials
+3. Use `smtp.resend.com`, port `587`
+
+> **Dev tip:** If SMTP credentials are absent, the OTP code is printed to the server console.
 
 ### Deploy steps
 
 ```bash
 # 1. Push to GitHub
-git push origin main
+git push origin master
 
 # 2. Go to vercel.com/new → import your repo
 # 3. Add the environment variables listed above
@@ -348,22 +487,20 @@ DATABASE_URL="postgresql://..." npm run seed
 ## 🧪 Running Tests
 
 ```bash
-# All tests
+# All tests (from repo root)
 npm test
 
-# Server tests only (18 tests across 2 suites)
+# Server tests only (60 tests across 3 suites)
 cd server && npm test
-
-# Client tests only
-cd client && npm test
 ```
 
 ### What's tested
 
 | Suite | Tests | Covers |
 |---|---|---|
-| Roommate Compatibility | 9 cases | Budget overlap, sleep mismatch, lifestyle scoring, edge cases |
-| Property Recommendation + Scam Detection | 9 cases | Budget fit, distance scoring, verification boost, scam flags |
+| Roommate Compatibility | 9 | Budget overlap, sleep mismatch, lifestyle scoring, edge cases |
+| Property Recommendation + Scam Detection | 9 | Budget fit, distance scoring, verification boost, scam flags |
+| AI Services | 42 | Schema validation, NL filter extraction, prompt injection resistance, PII removal, scam neutrality, demo flow queries |
 
 ---
 
@@ -373,10 +510,15 @@ cd client && npm test
 <summary><strong>Authentication</strong></summary>
 
 ```
-POST  /api/auth/register      Register new user (student or owner)
-POST  /api/auth/login         Login → returns JWT
-GET   /api/auth/me            Get logged-in user (auth required)
-PUT   /api/auth/profile       Update profile (auth required)
+POST  /api/auth/register            Register (email + password)
+POST  /api/auth/login               Login (email + password) → JWT
+POST  /api/auth/google              Google OAuth → JWT
+POST  /api/auth/phone/send-otp      Send SMS OTP to phone number
+POST  /api/auth/phone/verify-otp    Verify phone OTP → JWT
+POST  /api/auth/email/send-otp      Send email OTP (passwordless)
+POST  /api/auth/email/verify-otp    Verify email OTP → JWT
+GET   /api/auth/me                  Get logged-in user (auth required)
+PUT   /api/auth/profile             Update profile (auth required)
 ```
 </details>
 
@@ -422,6 +564,21 @@ PUT   /api/enquiries/:id/respond          Owner responds (auth)
 </details>
 
 <details>
+<summary><strong>AI (NestAI — IBM Granite)</strong></summary>
+
+```
+GET   /api/ai/status                              AI subsystem health
+POST  /api/ai/search/parse                        NL query → structured filters
+POST  /api/ai/properties/compare                  AI property comparison (2–3 props)
+GET   /api/ai/properties/:id/summary              NestAI Property Brief (cached)
+GET   /api/ai/properties/:id/reviews/summary      AI review summary (min 3 reviews)
+GET   /api/ai/properties/:id/risk-explanation     Scam-risk AI explanation
+GET   /api/ai/roommates/:id/explanation           Compatibility explanation (auth)
+POST  /api/ai/chat                                NestAI housing assistant
+```
+</details>
+
+<details>
 <summary><strong>Admin</strong></summary>
 
 ```
@@ -440,29 +597,25 @@ PUT   /api/admin/users/:id/toggle        Activate / deactivate user
 
 ## 🤝 Roommate Compatibility Algorithm
 
-A transparent, rule-based weighted scoring system. No black-box ML — judges can verify the math.
+A transparent, rule-based weighted scoring system.
 
 ```
 Total Score (0–100) =
-  Budget overlap       × 20%  (proportional range overlap)
-  Location match       × 15%  (exact locality string match)
-  Sleep schedule       × 15%  (early bird / night owl / flexible)
-  Cleanliness          × 15%  (4-level scale with graceful degradation)
-  Smoking + Drinking   × 15%  (boolean match, split equally)
-  Study + Noise habits × 10%  (flexible preference handling)
-  Food preference      × 5%   (veg / non-veg / any)
-  Visitors + Pets      × 5%   (frequency + boolean)
+  Budget overlap       × 20%
+  Location match       × 15%
+  Sleep schedule       × 15%
+  Cleanliness          × 15%
+  Smoking + Drinking   × 15%
+  Study + Noise habits × 10%
+  Food preference      × 5%
+  Visitors + Pets      × 5%
 ```
 
-**Output:** Score + per-category breakdown + "Your strongest matches are budget, location, cleanliness."
-
-> Disclaimer: Score is a lifestyle indicator, not a guarantee of personal compatibility.
+After the score is calculated deterministically, NestAI (IBM Granite) explains it in plain English — it never modifies the score.
 
 ---
 
 ## 💡 Smart Recommendation Engine
-
-Every property gets a match score against your stated preferences:
 
 | Factor | Max Points |
 |---|---|
@@ -474,59 +627,53 @@ Every property gets a match score against your stated preferences:
 | Property type | 5 |
 | Availability | 5 |
 
-**Displayed as:** *"92% match — within your budget, 1.2 km from campus, verified, Wi-Fi included."*
-
 ---
 
 ## ⚠️ Scam Risk Detector
-
-Each listing is automatically scored for scam signals:
 
 | Signal | Risk Points |
 |---|---|
 | Rent > 50% below area average | +30 |
 | Missing or incomplete address | +20 |
 | No property photos | +15 |
-| Rent 30–50% below average | +15 |
 | Unusually high deposit (>6× rent) | +15 |
 | Missing contact info | +10 |
+| Owner account < 30 days old | +10 |
 | Unverified property | +5 |
-| Multiple user reports | escalates to High |
 
-**Result:** 🟢 Low Risk · 🟡 Review Recommended · 🔴 High Risk
+**Result:** 🟢 Low Risk · 🟡 Review Recommended · 🔴 High Caution
 
-> Automated only — not a legal guarantee. Always visit before paying.
+NestAI explains detected signals in neutral language — it never calls anyone a scammer.
 
 ---
 
 ## 🔒 Security
 
 - Passwords hashed with **bcrypt** (12 rounds)
+- OTP codes hashed with **bcrypt** before storage
 - **JWT** tokens, 7-day expiry
-- **Role-based access control** on all routes (student / owner / admin)
-- **Rate limiting**: 200 req/15 min general, 20 req/15 min on auth
+- **Google ID tokens verified server-side** with `google-auth-library`
+- **Role-based access control** on all routes
+- **Rate limiting**: 200 req/15 min general, 20 req/15 min auth, 5 OTP requests/10 min
 - **Zod** validation on every API input
-- **Helmet** security headers
-- **CORS** restricted to frontend origin
-- Zero plain-text credentials in source code
-- `.env` files excluded from Git and Vercel
+- **Helmet** security headers + **CORS** restricted to frontend origin
+- OTP endpoints use constant-time comparison
+- Email-enumeration protection on email OTP endpoint
+- PII stripped before every IBM Granite API call
+- Zero credentials committed to source code
 
 ---
 
 ## 🌱 Seed Data
 
-The seed script creates realistic demo data for Guwahati, Assam:
-
 | Data | Count |
 |---|---|
-| Property listings (PG, hostel, flat, room, shared) | 12 |
-| Users (students + owners + admin) | 11 |
+| Property listings | 12 |
+| Users | 11 |
 | Roommate profiles | 8 |
 | Reviews | 10 |
 | Enquiries | 3 |
 | Reported listings | 3 |
-
-Locations include: Jalukbari, Chandmari, Dispur, Zoo Road, Ganeshguri, Panbazar — all near real Guwahati colleges.
 
 ---
 
@@ -536,46 +683,24 @@ Locations include: Jalukbari, Chandmari, Dispur, Zoo Road, Ganeshguri, Panbazar 
 - [ ] Aadhaar-based owner verification (DigiLocker integration)
 - [ ] Video property tours
 - [ ] Lease agreement template generator
-- [ ] WhatsApp notification for enquiry updates
+- [ ] WhatsApp OTP via Twilio (alternative to SMS)
 
 ### Phase 2 — Communication
 - [ ] Real-time chat (Socket.io) between students and owners
 - [ ] Push notifications (PWA)
 - [ ] Email digest for new matching listings
 
-### Phase 3 — Intelligence
-- [ ] ML-powered roommate compatibility (beyond rule-based)
+### Phase 3 — AI & Intelligence
+- [ ] pgvector production vector store for RAG
 - [ ] Price prediction for a given locality
-- [ ] AI-generated listing descriptions for owners
 - [ ] Anomaly detection for scam listings
+- [ ] Personalised property recommendations with embeddings
 
 ### Phase 4 — Scale
 - [ ] React Native mobile app (iOS + Android)
 - [ ] Cloudinary / AWS S3 for image uploads
-- [ ] Multi-city expansion (beyond Guwahati)
+- [ ] Multi-city expansion
 - [ ] Owner analytics dashboard
-- [ ] Student community forum
-
-### Phase 5 — Ecosystem
-- [ ] Integration with college portals
-- [ ] PG/hostel booking and digital agreement
-- [ ] Monthly expense splitting tool for roommates
-- [ ] Credit scoring for tenants
-
----
-
-## 📸 Pages Overview
-
-| Page | Description |
-|---|---|
-| **Landing** | Hero section, search bar, featured listings, how it works, testimonials, safety tips |
-| **Search** | Grid + map view, 15+ filters, sorting, pagination, skeleton loaders |
-| **Property Detail** | Photo gallery, amenities, scam risk badge, nearby facilities, reviews, enquiry form |
-| **Roommate Matching** | Multi-step questionnaire, compatibility scores, match explanations |
-| **Compare** | Side-by-side table for up to 3 properties, best-value highlights |
-| **Student Dashboard** | Saved properties, enquiries sent, roommate matches, recommendations |
-| **Owner Dashboard** | Listings management, enquiries received, verification status |
-| **Admin Dashboard** | Platform stats, pending verifications, reports, user management |
 
 ---
 

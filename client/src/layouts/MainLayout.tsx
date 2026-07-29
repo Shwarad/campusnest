@@ -2,6 +2,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { Home, Search, Users, Menu, X, LogOut, User, LayoutDashboard, Plus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import NestAIChat from '../components/ai/NestAIChat';
 
 export default function MainLayout() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -161,6 +162,9 @@ export default function MainLayout() {
       <main className="flex-1">
         <Outlet />
       </main>
+
+      {/* NestAI Floating Chat Widget */}
+      <NestAIChat />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 mt-auto">

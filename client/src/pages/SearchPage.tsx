@@ -10,6 +10,8 @@ import { Property, PropertyFilters } from '../types';
 import { useAuth } from '../context/AuthContext';
 import PropertyCard from '../components/PropertyCard';
 import PropertyMap from '../components/PropertyMap';
+import NaturalLanguageSearch from '../components/ai/NaturalLanguageSearch';
+import { AISearchFilters } from '../services/aiService';
 import toast from 'react-hot-toast';
 
 const PROPERTY_TYPES = [
@@ -149,15 +151,47 @@ export default function SearchPage() {
     filters.parking, filters.laundry, filters.food, filters.verifiedOnly,
   ].filter(Boolean).length;
 
+  const handleAIFilters = (aiFilters: AISearchFilters, queryParams: Record<string, string>) => {
+    setPage(1);
+    // Map AI query params onto existing filter state
+    setFilters({
+      search:           queryParams.search        || '',
+      maxRent:          queryParams.maxRent        ? Number(queryParams.maxRent)       : undefined,
+      minRent:          queryParams.minRent        ? Number(queryParams.minRent)        : undefined,
+      college:          queryParams.college        || '',
+      propertyType:     queryParams.propertyType   || '',
+      genderPreference: queryParams.genderPreference || '',
+      maxDistance:      queryParams.maxDistance    ? Number(queryParams.maxDistance)   : undefined,
+      verifiedOnly:     queryParams.verifiedOnly === 'true',
+      wifi:             queryParams.wifi           === 'true',
+      food:             queryParams.food           === 'true',
+      ac:               queryParams.ac             === 'true',
+      attachedBathroom: queryParams.attachedBathroom === 'true',
+      parking:          queryParams.parking        === 'true',
+      laundry:          queryParams.laundry        === 'true',
+      powerBackup:      queryParams.powerBackup    === 'true',
+      petFriendly:      queryParams.petFriendly    === 'true',
+      sortBy:           (aiFilters.sortBy && aiFilters.sortBy !== 'relevance') ? aiFilters.sortBy : '',
+    });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      {/* Search Bar */}
+      {/* AI Search Bar */}
+      <div className="mb-4">
+        <NaturalLanguageSearch
+          onFiltersExtracted={handleAIFilters}
+          onReset={clearFilters}
+        />
+      </div>
+
+      {/* Standard Search Bar (fallback / quick search) */}
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by college, locality, or property name..."
+            placeholder="Or type to search by college, locality, or property name..."
             className="input pl-9"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}

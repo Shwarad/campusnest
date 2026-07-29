@@ -21,6 +21,7 @@ import propertyRoutes from './routes/properties';
 import roommateRoutes from './routes/roommates';
 import enquiryRoutes from './routes/enquiries';
 import adminRoutes from './routes/admin';
+import aiRoutes from './ai/ai.routes';
 
 const app = express();
 
@@ -87,6 +88,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/roommates',  roommateRoutes);
 app.use('/api/enquiries',  enquiryRoutes);
 app.use('/api/admin',      adminRoutes);
+app.use('/api/ai',         aiRoutes);
 
 // ── Health check ───────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
