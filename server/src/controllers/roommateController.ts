@@ -30,8 +30,8 @@ export const getRoommateProfiles = async (req: AuthRequest, res: Response): Prom
     const { college, locality, budget, roomType } = req.query as Record<string, string>;
     const where: Record<string, unknown> = { isActive: true };
     if (req.user) where.userId = { not: req.user.id };
-    if (college) where.college = { contains: college };
-    if (locality) where.preferredLocality = { contains: locality };
+    if (college) where.college = { contains: college, mode: 'insensitive' };
+    if (locality) where.preferredLocality = { contains: locality, mode: 'insensitive' };
     if (budget) where.budgetMax = { gte: Number(budget) };
     if (roomType) where.roomType = roomType;
 

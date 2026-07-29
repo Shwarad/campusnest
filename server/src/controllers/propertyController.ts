@@ -86,10 +86,10 @@ export const getProperties = async (req: AuthRequest, res: Response): Promise<vo
     const where: Prisma.PropertyWhereInput = { isActive: true };
     if (search) {
       where.OR = [
-        { title: { contains: search } },
-        { locality: { contains: search } },
-        { city: { contains: search } },
-        { college: { contains: search } },
+        { title:    { contains: search, mode: 'insensitive' } },
+        { locality: { contains: search, mode: 'insensitive' } },
+        { city:     { contains: search, mode: 'insensitive' } },
+        { college:  { contains: search, mode: 'insensitive' } },
       ];
     }
     if (minRent) where.rent = { ...where.rent as object, gte: Number(minRent) };
@@ -106,7 +106,7 @@ export const getProperties = async (req: AuthRequest, res: Response): Promise<vo
     if (powerBackup === 'true') where.powerBackup = true;
     if (petFriendly === 'true') where.petFriendly = true;
     if (verifiedOnly === 'true') where.verificationStatus = 'verified';
-    if (college) where.college = { contains: college };
+    if (college) where.college = { contains: college, mode: 'insensitive' };
     if (maxDistance) where.distanceFromCollege = { lte: Number(maxDistance) };
 
     let orderBy: Prisma.PropertyOrderByWithRelationInput = { createdAt: 'desc' };
@@ -279,7 +279,7 @@ export const getRecommendedProperties = async (req: AuthRequest, res: Response):
   try {
     const { budget, college, propertyType } = req.query as Record<string, string>;
     const where: Prisma.PropertyWhereInput = { isActive: true, isAvailable: true };
-    if (college) where.college = { contains: college };
+    if (college) where.college = { contains: college, mode: 'insensitive' };
     if (propertyType) where.propertyType = propertyType as never;
 
     const raw = await prisma.property.findMany({ where, take: 20, include: { owner: { select: { id: true, name: true, isVerified: true } }, facilities: true } });

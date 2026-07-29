@@ -113,7 +113,7 @@ export async function semanticSearch(
   // Fetch all candidate properties
   const where: Record<string, unknown> = { isActive: true, isAvailable: true };
   if (options.maximumRent) where.rent = { lte: options.maximumRent };
-  if (options.college)     where.college = { contains: options.college };
+  if (options.college)     where.college = { contains: options.college, mode: 'insensitive' };
   if (options.maxDistanceKm) where.distanceFromCollege = { lte: options.maxDistanceKm };
 
   const properties = await prisma.property.findMany({ where: where as never, take: 100 });

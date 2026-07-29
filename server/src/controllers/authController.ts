@@ -107,7 +107,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.json({ message: 'Login successful', token, user: safeUser(user as never) });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ message: 'Login failed. Please try again.' });
+    // Surface a helpful message when the DB is unreachable / not seeded
+    const msg = (err as Error).message ?? '';
+    if (msg.includes('ECONNREFUSED') || msg.includes('connect') || msg.includes('database')) {
+      res.status(500).json({ message: 'Database is unavailable. Please check server configuration.' });
+    } else {
+      res.status(500).json({ message: 'Login failed. Please try again.' });
+    }
   }
 };
 
