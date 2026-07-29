@@ -4,6 +4,8 @@ import { prisma } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
 import { calculatePropertyRecommendation, calculateScamRisk } from '../utils/recommendation';
 import { Prisma } from '@prisma/client';
+import { invalidateSummaryCache } from '../ai/listingSummary.service';
+import { invalidateReviewCache } from '../ai/reviewSummary.service';
 
 const propertySchema = z.object({
   title: z.string().min(5).max(200),
@@ -222,6 +224,7 @@ export const updateProperty = async (req: AuthRequest, res: Response): Promise<v
     }
     const { nearbyFacilities, address, coordinates, amenities, ...rest } = req.body;
     const updated = await prisma.property.update({ where: { id: req.params.id }, data: rest, include: { facilities: true, owner: true } });
+    invalidateSummaryCache(req.params.id);
     res.json({ message: 'Property updated', property: shapeProperty(updated) });
   } catch {
     res.status(500).json({ message: 'Failed to update property.' });
@@ -236,6 +239,7 @@ export const deleteProperty = async (req: AuthRequest, res: Response): Promise<v
       res.status(403).json({ message: 'Not authorized.' }); return;
     }
     await prisma.property.update({ where: { id: req.params.id }, data: { isActive: false } });
+    invalidateSummaryCache(req.params.id);
     res.json({ message: 'Property removed.' });
   } catch {
     res.status(500).json({ message: 'Failed to delete property.' });
@@ -314,6 +318,7 @@ export const createReview = async (req: AuthRequest, res: Response): Promise<voi
     const agg = await prisma.review.aggregate({ where: { propertyId: req.params.id }, _avg: { overallRating: true }, _count: true });
     await prisma.property.update({ where: { id: req.params.id }, data: { avgRating: Math.round((agg._avg.overallRating ?? 0) * 10) / 10, reviewCount: agg._count } });
 
+    invalidateReviewCache(req.params.id);
     res.status(201).json({ message: 'Review submitted', review });
   } catch (err: unknown) {
     const e = err as { code?: string };

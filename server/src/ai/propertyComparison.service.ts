@@ -139,9 +139,10 @@ export async function compareProperties(
     throw new Error('One or more properties could not be found.');
   }
 
-  const comparison: PropertyMetrics[] = rawProperties.map((p) =>
-    calculateMetrics(p, preferences)
-  );
+  // Explicitly strip PII before any further processing
+  const comparison: PropertyMetrics[] = rawProperties
+    .map(stripSensitiveFields)
+    .map((p) => calculateMetrics(p, preferences));
 
   if (MOCK_MODE) {
     const aiExplanation = mockPropertyComparison(comparison, preferences);
