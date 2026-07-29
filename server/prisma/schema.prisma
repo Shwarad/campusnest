@@ -18,13 +18,15 @@ generator client {
 // ─────────────────────────────────────────────────────────────────────────────
 
 datasource db {
-  provider = "postgresql"
+  // LOCAL DEV: provider = "sqlite"  (DATABASE_URL=file:./campusnest.db)
+  // PRODUCTION: provider = "postgresql"  (DATABASE_URL=postgresql://...)
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-// NOTE: PostgreSQL supports native enums and String[] arrays.
-// The JSON-stringify workaround (used for SQLite) is NOT needed here —
-// houseRules, images, scamRiskFlags are stored as native Text[] arrays.
+// NOTE: When using PostgreSQL, native String[] arrays are supported.
+// With SQLite the array fields (houseRules, images, scamRiskFlags) are
+// stored as JSON strings and parsed by shapeProperty() in the controller.
 
 model User {
   id             String   @id @default(cuid())
